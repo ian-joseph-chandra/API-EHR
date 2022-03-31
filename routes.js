@@ -1,13 +1,19 @@
 'use strict';
+const patient = require('./controllers/patient.controller')
 
 module.exports = (route) => {
+    // Default route redirects to patients
+    route.get('', (req, res) => res.redirect('/patients'))
 
-    route.get('', (req, res) => res.redirect('/users'))
+    // Routing for Patient CRUD
+    route.get('/patients', (req, res) => console.log("Get all patients"))
+    route.get('/patients/:patient', (req, res) => console.log(`Get a patient with id = ${req.params}`))
+    route.post('/patients', (req, res) => patient.create(req, res))
 
-    // Routing for User CRUD
-    route.get('/users', (req, res) => console.log("Get all users"))
-    route.get('/users/:user', (req, res) => console.log(`Get a user with id = ${req.params}`))
-    route.post('/users', (req, res) => console.log("Create a new user"))
+    // Routing for Doctor CRUD
+    route.get('/patients', (req, res) => console.log("Get all patients"))
+    route.get('/patients/:patient', (req, res) => console.log(`Get a patient with id = ${req.params}`))
+    route.post('/patients', (req, res) => console.log("Create a new patient"))
 
     // Routing for Hospital CRUD
     route.get('/hospitals', (req, res) => console.log("Get all hospitals"))
