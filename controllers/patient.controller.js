@@ -5,8 +5,8 @@ function create(req, res) {
     // patient.blockchain =
     // patient.diseases = []
     // patient.hospitals = []
-    bc.create()
     bdb.create()
+    bc.create()
 }
 
 function read(req, res){}
