@@ -131,3 +131,4 @@ dist
 
 # folders
 /blockchain/smart-contracts/build/contracts/
+/blockchain/bc.connection.js
