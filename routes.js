@@ -1,5 +1,6 @@
 'use strict';
-const patient = require('./controllers/patient.controller')
+const patient = require('./controllers/patient.controller'),
+    record = require('./controllers/record.controller');
 
 module.exports = (route) => {
     // Default route redirects to patients
@@ -7,7 +8,7 @@ module.exports = (route) => {
 
     // Routing for Patient CR
     route.get('/patients', (req, res) => console.log("Get all patients"))
-    route.get('/patients/:patient', (req, res) => console.log(`Get a patient with id = ${req.params}`))
+    route.get('/patients/:patient', (req, res) => {})
     route.post('/patients', (req, res) => patient.create(req, res))
 
     // Routing for Doctor CR
@@ -23,10 +24,12 @@ module.exports = (route) => {
     // Routing for Diseases CR
     route.get('/diseases', (req, res) => console.log("Get all diseases"))
     route.get('/diseases/:disease', (req, res) => console.log(`Get a disease with id = ${req.params}`))
-    route.post('/diseases', (req, res) => console.log("Create a new disease"))
 
     // Routing for Records CR
     route.get('/records', (req, res) => console.log("Get all records"))
-    route.get('/records/:record', (req, res) => console.log(`Get a record with id = ${req.params}`))
-    route.post('/records', (req, res) => console.log("Create a new record"))
+    route.get('/patients/:patient/' +
+        'hospitals/:hospital/' +
+        'diseases/:disease/' +
+        'records/:record', (req, res) => record.read(req, res))
+    route.post('/records', (req, res) => record.create(req, res))
 }

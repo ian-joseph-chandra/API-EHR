@@ -128,3 +128,6 @@ dist
 
 # IDE
 .idea
+
+# folders
+/blockchain/smart-contracts/build/contracts/
