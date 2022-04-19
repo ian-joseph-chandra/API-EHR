@@ -1,5 +1,5 @@
-const bdb = require('../bigchaindb/controllers/patient.controllers'),
-    bc = require('../blockchain/controllers/patient.controllers')
+const bdb = require('../bigchaindb/controllers/patient.controller'),
+    bc = require('../blockchain/controllers/patient.controller')
 
 function create(req, res) {
     // patient.blockchain =
