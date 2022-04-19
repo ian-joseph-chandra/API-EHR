@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
 
-const diseasesSchema = new mongoose.Schema({
-    patientId: {
+const schema = new mongoose.Schema({
+    patient_bc_address: {
         type: String,
         required: true
     },
-    hospitalId: {
+    hospital_bc_address: {
         type: String,
         required: true
     },
-    disease: {
+    name: {
         type: String,
         required: true
     },
     model: {
         type: String,
-        required: true
+        default: "Disease"
     }
 });
 
-module.exports = mongoose.model("diseases",diseasesSchema);
+module.exports = mongoose.model("Disease", schema);

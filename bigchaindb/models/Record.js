@@ -1,34 +1,24 @@
 const mongoose = require("mongoose");
 
-const recordsSchema = new mongoose.Schema({
-    patientId: {
-        type: String,
-        required: true
-    },
-    doctorId: {
-        type: String,
-        required: true
-    },
-    hospitalId: {
-        type: String,
-        required: true
-    },
-    disease: {
-        type: String,
-        required: true
-    },
-    diagnose: {
-        type: String,
-        required: true
-    },
-    date: {
-        type: Date,
-        required: true
-    },
-    model: {
-        type: String,
-        required: true
-    }
-});
+const schema = new mongoose.Schema({
+        disease_id: {
+            type: mongoose.Types.ObjectId,
+            required: true
+        },
+        diagnose: {
+            type: String,
+            required: true
+        },
+        bc_tx_address: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        model: {
+            type: String,
+            default: "Record"
+        }
+    }, {timestamps: true}
+);
 
-module.exports = mongoose.model("records",recordsSchema);
+module.exports = mongoose.model("Record", schema);

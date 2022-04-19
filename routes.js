@@ -1,5 +1,6 @@
 'use strict';
 const patient = require('./controllers/patient.controller'),
+    hospital = require('./controllers/hospital.controller'),
     record = require('./controllers/record.controller')
 
 module.exports = (route) => {
@@ -19,7 +20,7 @@ module.exports = (route) => {
     // Routing for Hospital CR
     route.get('/hospitals', (req, res) => console.log("Get all hospitals"))
     route.get('/hospitals/:hospital', (req, res) => console.log(`Get a hospital with id = ${req.params}`))
-    route.post('/hospitals', (req, res) => console.log("Create a new hospital"))
+    route.post('/hospitals', (req, res) => hospital.create(req, res))
 
     // Routing for Diseases CR
     route.get('/diseases', (req, res) => console.log("Get all diseases"))
