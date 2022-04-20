@@ -1,114 +1,41 @@
 const bdb = require('../bdb'),
     hospitals = bdb.mongoose.connection.collection('hospitals'),
-    controllers = {
+    controller = {
         disease: require('../controllers/disease.controller')
-    },
-    models = {
-        Disease: require("../models/Disease"),
-        Record: require("../models/Record")
-    };
+    }, Record = require("../models/Record");
 
 async function create(data, res) {
     data.hospital = await hospitals.findOne({
         'bc_address': data.hospital.bc_address
     })
 
-    let disease = await controllers.disease.read(data)
-    console.log("disease:", disease)
-    let receipt = null
+    let disease = await controller.disease.read(data)
+    let receipt = {}
 
-    // Create disease if not exists
-    if (disease == null){
-        // receipt = await controllers.disease.create(data)
-    } else {
-
+    // Create Disease if not exists
+    if (disease == null) {
+        const response = await controller.disease.create(data)
+        disease = response.asset.data
     }
-        // 2. If disease not exists, create disease
-        // 3.
-        // 3.
 
-        const hospital = await hospitals.findOne()
+    receipt.disease = disease
 
-    // console.log(hospital)
-    // let diseasesId = "";
+    // Create Record
+    const record = new Record({
+        disease_id: disease.data._id,
+        diagnose: data.diagnose,
+        bc_tx_address: data.bc_tx_address
+    })
 
-    // collection.find({
-    //     'data._id': input.hospitalId
-    // }).toArray(function (err, resp) {
-    //     bdb.collection.find({
-    //         'data.disease': input.disease,
-    //         'data.model': 'disease'
-    //     }).toArray(function (err, resp) {
-    //         if (!resp.length) {
-    //             const data = new Disease({
-    //                 patientId: input.patientId,
-    //                 hospitalId: input.hospitalId,
-    //                 disease: input.disease,
-    //                 model: "disease"
-    //             })
-    //             const metadata = null
-    //
-    //
-    //             const tx = driver.Transaction.makeCreateTransaction(
-    //                 data,
-    //                 metadata,
-    //
-    //                 // A transaction needs an output
-    //                 [driver.Transaction.makeOutput(
-    //                     driver.Transaction.makeEd25519Condition(signaturePub))],
-    //                 signaturePub
-    //             )
-    //
-    //             const txSigned = driver.Transaction.signTransaction(tx, signaturePri)
-    //
-    //             bdb.conn.postTransactionCommit(txSigned)
-    //                 .then(retrievedTx => {
-    //                     console.log('Transaction', retrievedTx.id, 'successfully posted.');
-    //                     diseasesId = retrievedTx.asset.data._id;
-    //                 })
-    //         } else {
-    //             console.log('disease already exist')
-    //             diseasesId = resp[0].data._id;
-    //         }
-    //
-    //         const newRecord = new Record({
-    //             diseaseId: diseasesId,
-    //             doctorId: req.body.doctorId,
-    //             diagnose: req.body.diagnose,
-    //             date: req.body.date,
-    //             model: "record"
-    //         })
-    //
-    //         try {
-    //             const data = newRecord
-    //             const metadata = null
-    //
-    //             const tx = driver.Transaction.makeCreateTransaction(
-    //                 data,
-    //                 metadata,
-    //
-    //                 // A transaction needs an output
-    //                 [bdb.driver.Transaction.makeOutput(
-    //                     bdb.driver.Transaction.makeEd25519Condition(signaturePub))],
-    //                 signaturePub
-    //             )
-    //
-    //             const txSigned = bdb.driver.Transaction.signTransaction(tx, signaturePri)
-    //
-    //             bdb.conn.postTransactionCommit(txSigned)
-    //                 .then(retrievedTx => console.log('Transaction', retrievedTx.id, 'successfully posted.'))
-    //
-    //             res.status(200).json({
-    //                 message: "your EHR successfully added, heres your EHR",
-    //                 data: data
-    //             });
-    //
-    //         } catch (err) {
-    //             res.status(500).json(err);
-    //         }
-    //     })
-    // })
-    res.status(200).json(receipt).end()
+    const response = await bdb.create_tx(
+        record,
+        null,
+        data.hospital.ed25519_private_key,
+        data.hospital.ed25519_public_key
+    )
+
+    receipt.record = response.asset.data
+    return receipt
 }
 
 function getAll(req, res) {

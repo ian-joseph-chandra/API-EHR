@@ -7,7 +7,9 @@ async function create(req, res) {
     // await bc.create(body.bc, res)
 
     body.bdb.bc_tx_address = "tx_12345";
-    bdb.create(body.bdb, res)
+    const receipt = await bdb.create(body.bdb, res)
+
+    res.status(200).json(receipt).end()
 }
 
 function read(req, res) {

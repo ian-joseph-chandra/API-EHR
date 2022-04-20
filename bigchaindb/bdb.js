@@ -7,7 +7,7 @@ const driver = require('bigchaindb-driver'),
 
 async function create_tx(data, metadata, privateKey, publicKey, res) {
     try {
-        // I was trying to make multiple outputscollec for 1 assets (future works)
+        // I was trying to make multiple outputs for 1 assets (future works)
 
         // let tx_conditions = [];
         //
