@@ -26,14 +26,14 @@ async function read(data) {
     });
 }
 
-function index(data, res) {
-    res.status(200).json(assets.find({
+function index(data) {
+    return assets.find({
         'data.model': "Disease",
         'data.patient_bc_address': data.patient.bc_address,
         'data.hospital_bc_address': data.hospital.bc_address
-    }).toArray()).end()
+    }).toArray()
 }
 
 module.exports = {
-    create, read
+    create, read, index
 }

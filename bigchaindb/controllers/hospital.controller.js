@@ -2,7 +2,7 @@ const bdb = require('../bdb'),
     driver = bdb.driver,
     model = require('../models/Hospital');
 
-async function create(data, res) {
+async function create(data) {
     // Create objects
     const keys = new driver.Ed25519Keypair(),
         hospital = new model({

@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
             required: true,
             unique: true
         },
+        date: {
+            type: Date,
+            default: Date.now()
+        },
         model: {
             type: String,
             default: "Record"
