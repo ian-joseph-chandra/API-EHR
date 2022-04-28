@@ -26,7 +26,8 @@ from step 2.a
 <br><br>
 3. Run the API using the command below:
 ```
-npm dev
+npm run dev
 ```
 4. Use the given API requests template below to test the API:
-   <br>[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/10544427-03fab442-76c2-48fb-8b08-ab3443c73d5a?action=collection%2Ffork&collection-url=entityId%3D10544427-03fab442-76c2-48fb-8b08-ab3443c73d5a%26entityType%3Dcollection%26workspaceId%3D637062c5-eebc-4bb5-b531-564c71e30f6a)
+    <br>[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/10544427-03fab442-76c2-48fb-8b08-ab3443c73d5a?action=collection%2Ffork&collection-url=entityId%3D10544427-03fab442-76c2-48fb-8b08-ab3443c73d5a%26entityType%3Dcollection%26workspaceId%3D637062c5-eebc-4bb5-b531-564c71e30f6a)
+    <br>**Notes**: you need to change the bc addresses of patient, doctor, & hospital using your own addresses

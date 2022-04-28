@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --watch * *./app"
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "bigchaindb-driver": "^4.3.0",
