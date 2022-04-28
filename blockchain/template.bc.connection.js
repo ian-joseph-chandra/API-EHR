@@ -13,7 +13,7 @@ const Web3 = require('web3'),
     },
     contract = {
         address: '', // Fill with deployed contract address
-        abi: [] // Fill with deployed contract abi
+        abi: require('../blockchain/smart-contracts/build/contracts/Records.json').abi // Fill with deployed contract abi
     };
 
 contract.methods = new web3.eth.Contract(contract.abi, contract.address).methods;

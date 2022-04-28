@@ -10,7 +10,8 @@ module.exports = (route) => {
 
     // Routing for Patient CRUD functions
     route.get('/patients', (req, res) => console.log("Get all patients"))
-    route.get('/patients/:patient', (req, res) => {})
+    route.get('/patients/:patient', (req, res) => {
+    })
     route.post('/patients', (req, res) => patient.create(req, res))
 
     // Routing for Doctor CRUD functions
@@ -24,7 +25,11 @@ module.exports = (route) => {
     route.post('/hospitals', (req, res) => hospital.create(req, res))
 
     // Routing for Diseases CRUD functions
-    route.get('/diseases', (req, res) => disease.index(req, res))
+    route.get('/patients/:patient' +
+        '/diseases', (req, res) => disease.index(req, res)) // Get all diseases
+    route.get('/patients/:patient' +
+        '/hospitals/:hospital' +
+        '/diseases', (req, res) => disease.index(req, res)) // Get all diseases from a hospital
 
     // Routing for Records CRUD functions
     route.get('/patients/:patient' +

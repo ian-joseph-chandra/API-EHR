@@ -13,6 +13,7 @@ async function create_tx(data, metadata, privateKey, publicKey, res) {
         //
         // for (let i = 0; i < publicKeys.length; i++)
         //     tx_conditions[i] = transaction.makeEd25519Condition(publicKeys[i])
+        const start = Date.now()
 
         const tx = transaction.makeCreateTransaction(
             data,
@@ -26,6 +27,9 @@ async function create_tx(data, metadata, privateKey, publicKey, res) {
         )
 
         const txSigned = transaction.signTransaction(tx, privateKey)
+
+        const duration = Date.now() - start
+        console.log(duration)
 
         return await conn.postTransactionCommit(txSigned) // Return transaction receipt
     } catch (err) {

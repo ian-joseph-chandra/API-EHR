@@ -27,10 +27,15 @@ async function create(data) {
     };
 }
 
-function read(req, res) {
+function read(data) {
+}
+
+function diseases(data, hospital) {
+
 }
 
 module.exports = {
     create,
-    read
+    read,
+    diseases
 }

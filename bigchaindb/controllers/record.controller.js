@@ -5,7 +5,7 @@ const bdb = require('../bdb'),
 
 async function create(data) {
     data.hospital = await hospitals.findOne({
-        'bc_address': data.hospital.bc_address
+        'bc_address': data.hospital
     })
 
     let disease = await controllers.disease.read(data)
@@ -21,7 +21,7 @@ async function create(data) {
 
     // Create Record
     const record = new Record({
-        disease_id: disease.data._id,
+        disease_id: disease._id,
         diagnose: data.diagnose,
         bc_tx_address: data.bc_tx_address
     })
@@ -39,9 +39,9 @@ async function create(data) {
 
 async function index(data) {
     const disease = await controllers.disease.read({
-        patient: {bc_address: data.patient},
-        hospital: {bc_address: data.hospital},
-        disease: {name: data.disease}
+        patient: data.patient,
+        hospital: data.hospital,
+        disease: data.disease
     })
 
     return bdb.assets.find({
@@ -51,7 +51,6 @@ async function index(data) {
 }
 
 async function read(data) {
-    console.log("params:", data)
     const disease = await controllers.disease.read({
         patient: {bc_address: data.patient},
         hospital: {bc_address: data.hospital},

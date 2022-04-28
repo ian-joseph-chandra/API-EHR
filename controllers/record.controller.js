@@ -8,13 +8,15 @@ const bdb = require('../bigchaindb/controllers/record.controller'),
 async function create(req, res) {
     const body = req.body
 
-    const response = {}
-    // response.bc = await bc.create(body.bc, res)
+    body.cipher.date = Date.now()
+    body.metadata.date = body.cipher.date
 
-    // body.bdb.bc_tx_address = response.bc.
-    body.bdb.bc_tx_address = "tx_12345";
+    let response = {}
+    response.bc = await bc.create(body.metadata, res)
 
-    response.bdb = await bdb.create(body.bdb)
+    body.cipher.bc_tx_address = response.bc.transactionHash
+
+    response.bdb = await bdb.create(body.cipher)
 
     res.status(200).json(response).end()
 }
@@ -26,7 +28,6 @@ function read(req, res) {
 async function index(req, res) {
     let response = {}
     response.bdb = await bdb.index(req.params)
-    console.log("response:", response)
 
     res.status(200).json(response).end()
 }

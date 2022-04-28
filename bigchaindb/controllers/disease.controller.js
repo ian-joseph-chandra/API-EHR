@@ -4,9 +4,9 @@ const bdb = require('../bdb'),
 
 async function create(data) {
     const disease = new Disease({
-        patient_bc_address: data.patient.bc_address,
+        patient_bc_address: data.patient,
         hospital_bc_address: data.hospital.bc_address,
-        name: data.disease.name
+        name: data.disease
     })
 
     return bdb.create_tx(
@@ -20,17 +20,24 @@ async function create(data) {
 async function read(data) {
     return await assets.findOne({
         'data.model': "Disease",
-        'data.patient_bc_address': data.patient.bc_address,
-        'data.hospital_bc_address': data.hospital.bc_address,
-        'data.name': data.disease.name
+        'data.patient_bc_address': data.patient,
+        'data.hospital_bc_address': data.hospital.bc_address || data.hospital,
+        'data.name': data.disease
     });
 }
 
 function index(data) {
+    if (data.hospital) {
+        return assets.find({
+            'data.model': "Disease",
+            'data.patient_bc_address': data.patient,
+            'data.hospital_bc_address': data.hospital
+        }).toArray()
+    }
+
     return assets.find({
         'data.model': "Disease",
-        'data.patient_bc_address': data.patient.bc_address,
-        'data.hospital_bc_address': data.hospital.bc_address
+        'data.patient_bc_address': data.patient
     }).toArray()
 }
 

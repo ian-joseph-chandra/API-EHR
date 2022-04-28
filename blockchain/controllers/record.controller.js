@@ -6,7 +6,7 @@ async function create(data) {
         data.patient,
         data.doctor,
         data.disease,
-        data.detail,
+        data.diagnose,
         data.date
     ).send(conn.hospital.sender);
 }
