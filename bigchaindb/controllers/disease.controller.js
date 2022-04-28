@@ -21,7 +21,7 @@ async function read(data) {
     return await assets.findOne({
         'data.model': "Disease",
         'data.patient_bc_address': data.patient,
-        'data.hospital_bc_address': data.hospital.bc_address || data.hospital,
+        'data.hospital_bc_address': data.hospital,
         'data.name': data.disease
     });
 }

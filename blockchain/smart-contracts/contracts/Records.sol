@@ -23,8 +23,6 @@ contract Records {
         });
     }
 
-    // function read_disease() public view returns ()
-
     function read(
         address _patient,
         address _hospital,

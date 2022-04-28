@@ -1,18 +1,19 @@
 const bdb = require('../bdb'),
     driver = bdb.driver,
-    model = require('../models/Hospital');
+    hospitals = bdb.mongoose.connection.collection('hospitals'),
+    Hospital = require('../models/Hospital');
 
 async function create(data) {
     // Create objects
     const keys = new driver.Ed25519Keypair(),
-        hospital = new model({
+        hospital = new Hospital({
             name: data.name,
             bc_address: data.bc_address,
             ecdh_public_key: data.ecdh_public_key,
             ed25519_public_key: keys.publicKey,
             model: "Hospital"
         }),
-        mdb_data = new model({
+        mdb_data = new Hospital({
             name: data.name,
             bc_address: data.bc_address,
             ecdh_public_key: data.ecdh_public_key,
@@ -28,6 +29,9 @@ async function create(data) {
 }
 
 function read(data) {
+    return hospitals.findOne({
+        'bc_address': data.hospital
+    })
 }
 
 function diseases(data, hospital) {

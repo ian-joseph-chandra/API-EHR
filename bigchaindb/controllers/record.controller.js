@@ -1,66 +1,72 @@
 const bdb = require('../bdb'),
-    hospitals = bdb.mongoose.connection.collection('hospitals'),
-    controllers = {disease: require('../controllers/disease.controller')},
+    controllers = {
+        disease: require('../controllers/disease.controller'),
+        hospital: require('../controllers/hospital.controller'),
+        doctor: require('../controllers/doctor.controller')
+    },
     Record = require("../models/Record");
 
-async function create(data) {
-    data.hospital = await hospitals.findOne({
-        'bc_address': data.hospital
-    })
+async function create(data, metadata) {
+    const hospital = await controllers.hospital.read(data)
 
     let disease = await controllers.disease.read(data)
-    let receipt = {}
 
     // Create Disease if not exists
     if (disease == null) {
         const response = await controllers.disease.create(data)
-        disease = response.asset.data
+        disease = response.asset
     }
-
-    receipt.disease = disease
 
     // Create Record
     const record = new Record({
-        disease_id: disease._id,
+        disease_id: disease.data._id,
         diagnose: data.diagnose,
-        bc_tx_address: data.bc_tx_address
+        bc_tx_address: data.bc_tx_address,
+        doctor_bc_address: data.doctor
     })
 
-    const response = await bdb.create_tx(
+    const receipt = {}
+    receipt.disease = disease
+    receipt.record = await bdb.create_tx(
         record,
-        null,
-        data.hospital.ed25519_private_key,
-        data.hospital.ed25519_public_key
+        metadata,
+        hospital.ed25519_private_key,
+        hospital.ed25519_public_key
     )
 
-    receipt.record = response.asset.data
     return receipt
 }
 
 async function index(data) {
-    const disease = await controllers.disease.read({
-        patient: data.patient,
-        hospital: data.hospital,
-        disease: data.disease
-    })
+    const result = {}
 
-    return bdb.assets.find({
+    result.disease = await controllers.disease.read(data)
+    result.hospital = await controllers.hospital.read(data)
+    result.records = await bdb.assets.find({
         'data.model': "Record",
-        'data.disease_id': disease.data._id
+        'data.disease_id': result.disease.data._id
     }).toArray();
+
+    return result
 }
 
 async function read(data) {
-    const disease = await controllers.disease.read({
-        patient: {bc_address: data.patient},
-        hospital: {bc_address: data.hospital},
-        disease: {name: data.disease}
+    const result = {}
+
+    result.doctor = await controllers.doctor.read(data)
+    result.disease = await controllers.disease.read(data)
+
+    result.bdb.record = await bdb.assets.find({
+        'data.model': "Record",
+        'data.date': data.record
+    });
+
+    result.bdb.metadata = await bdb.metadata.find({
+        'id': result.bdb.record.id
     })
 
-    return bdb.assets.find({
-        'data.model': "Record",
-        'data.disease_id': disease.data._id,
-    });
+    console.log(result)
+    return result
 }
 
 module.exports = {

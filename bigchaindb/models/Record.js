@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
+    bc_tx_address: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    date: {
+        type: String,
+        default: Date.now()
+    },
     disease_id: {
         type: mongoose.Types.ObjectId,
         required: true
@@ -9,14 +18,9 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    bc_tx_address: {
+    doctor_bc_address: {
         type: String,
-        required: true,
-        unique: true
-    },
-    date: {
-        type: Date,
-        default: Date.now()
+        required: true
     },
     model: {
         type: String,

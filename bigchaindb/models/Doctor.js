@@ -5,14 +5,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    dob: {
-        type: Date,
-        required: true
-    },
-    doctorPubKey: {
+    bc_address: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
     },
     model: {
         type: String,

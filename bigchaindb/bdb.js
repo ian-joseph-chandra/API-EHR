@@ -1,9 +1,13 @@
+// Import BigchainDB components
 const driver = require('bigchaindb-driver'),
     transaction = driver.Transaction,
-    conn = new driver.Connection('http://localhost:9984/api/v1/'),
-    mongoose = require('mongoose'),
+    conn = new driver.Connection('http://localhost:9984/api/v1/');
+
+// Import MongoDB components
+const mongoose = require('mongoose'),
+    mdb_conn = mongoose.connect('mongodb://localhost:27017/bigchain'),
     assets = mongoose.connection.collection('assets'),
-    mdb_conn = mongoose.connect('mongodb://localhost:27017/bigchain');
+    metadata = mongoose.connection.collection('metadata');
 
 async function create_tx(data, metadata, privateKey, publicKey, res) {
     try {
@@ -13,8 +17,6 @@ async function create_tx(data, metadata, privateKey, publicKey, res) {
         //
         // for (let i = 0; i < publicKeys.length; i++)
         //     tx_conditions[i] = transaction.makeEd25519Condition(publicKeys[i])
-        const start = Date.now()
-
         const tx = transaction.makeCreateTransaction(
             data,
             metadata,
@@ -28,15 +30,12 @@ async function create_tx(data, metadata, privateKey, publicKey, res) {
 
         const txSigned = transaction.signTransaction(tx, privateKey)
 
-        const duration = Date.now() - start
-        console.log(duration)
-
         return await conn.postTransactionCommit(txSigned) // Return transaction receipt
     } catch (err) {
-        res.json(err).end()
+        res.status(500).json(err).end()
     }
 }
 
 module.exports = {
-    conn, driver, create_tx, mdb_conn, assets, mongoose
+    conn, driver, create_tx, mdb_conn, assets, mongoose, metadata
 }

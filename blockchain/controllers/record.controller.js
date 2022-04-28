@@ -16,7 +16,7 @@ async function read(data) {
         data.patient,
         data.hospital,
         data.disease,
-        data.date
+        data.timestamp
     ).call();
 }
 
