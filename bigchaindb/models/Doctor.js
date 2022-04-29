@@ -10,6 +10,9 @@ const schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    password: {
+        type: String
+    },
     model: {
         type: String,
         default: "Doctor"

@@ -11,13 +11,19 @@ async function create(data, res) {
         bc_address: data.bc_address,
     })
 
-    return bdb.create_tx(
+    const result = await bdb.create_tx(
         doctor,
         data,
         hospital.ed25519_private_key,
         hospital.ed25519_public_key,
         res
     )
+
+    doctor.password = data.password
+
+    doctor.save()
+
+    return result
 }
 
 async function read(data) {
