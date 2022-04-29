@@ -10,6 +10,9 @@ const schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String
+    },
     password: {
         type: String
     },

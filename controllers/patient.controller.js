@@ -15,5 +15,6 @@ function read(req, res) {
 }
 
 module.exports = {
-    create
+    create,
+    read
 }

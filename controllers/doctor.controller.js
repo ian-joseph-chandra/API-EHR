@@ -11,9 +11,20 @@ async function create(req, res) {
     res.status(200).json(response).end();
 }
 
-function read(req, res) {
+async function read(req, res) {
+    const response = await bdb.read(req.params)
+
+    res.status(200).json(response).end()
+}
+
+async function login(req, res) {
+    const response = await bdb.login(req.query)
+
+    res.status(200).json(response).end()
 }
 
 module.exports = {
-    create
+    create,
+    read,
+    login
 }

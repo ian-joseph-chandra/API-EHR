@@ -16,7 +16,8 @@ module.exports = (route) => {
     route.post('/patients', (req, res) => patient.create(req, res))
 
     // Routing for Doctor CRUD functions
-    route.get('/doctors/:doctor', (req, res) => console.log(`Get a patient with id = ${req.params}`))
+    route.get('/doctors', (req, res) => doctor.login(req, res))
+    route.get('/doctors/:doctor', (req, res) => doctor.read(req, res))
     route.post('/doctors', (req, res) => doctor.create(req, res))
 
     // Routing for Hospital CRUD functions
