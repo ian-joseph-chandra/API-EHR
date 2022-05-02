@@ -2,8 +2,7 @@ const bdb = require('../bigchaindb/controllers/disease.controller'),
     bc = require('../blockchain/controllers/disease.controller')
 
 async function index(req, res) {
-    let response = {}
-    response.bdb = await bdb.index(req.params)
+    const response = await bdb.index(req.params)
 
     res.status(200).json(response).end()
 }

@@ -19,15 +19,16 @@ const schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String
+    },
+    password: {
+        type: String
+    },
     ecdh_public_key: {
         type: String,
         required: true,
         unique: true
-    },
-    ed25519_public_key: {
-        type: String,
-        required: true,
-        unique: true,
     },
     model: {
         type: String,

@@ -10,9 +10,9 @@ module.exports = (route) => {
     route.get('', (req, res) => res.redirect('/patients'))
 
     // Routing for Patient CRUD functions
-    route.get('/patients', (req, res) => console.log("Get all patients"))
-    route.get('/patients/:patient', (req, res) => {
-    })
+    // route.get('/patients', (req, res) => console.log("Get all patients"))
+    route.get('/patients', (req, res) => patient.login(req, res))
+    route.get('/patients/:patient', (req, res) => patient.read(req, res))
     route.post('/patients', (req, res) => patient.create(req, res))
 
     // Routing for Doctor CRUD functions

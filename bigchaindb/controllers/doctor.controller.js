@@ -12,6 +12,7 @@ async function create(data, res) {
         bc_address: data.bc_address
     })
 
+    // store public data to assets collection 
     const result = await bdb.create_tx(
         doctor,
         data,
@@ -23,6 +24,7 @@ async function create(data, res) {
     doctor.password = data.password
     doctor.email = data.email
 
+    // store complete data to doctors collection
     doctor.save()
 
     return result
