@@ -6,35 +6,36 @@ const bdb = require('../bdb'),
     },
     Record = require("../models/Record");
 
-async function create(data, metadata) {
-    const hospital = await controllers.hospital.read(data)
+async function create(data, res) {
+    const hospital = await controllers.hospital.read({ hospital: data.bc_addresses.hospital })
+    
+    data.hospital = hospital
+    console.log(data)
 
-    let disease = await controllers.disease.read(data)
+    const response = {}
 
-    // Create Disease if not exists
-    if (disease == null) {
-        const response = await controllers.disease.create(data)
-        disease = response.asset
-    }
+    response.disease = await controllers.disease.create(data, res)
+
+    console.log(response)
 
     // Create Record
     const record = new Record({
-        disease_id: disease.data._id,
-        diagnose: data.diagnose,
-        bc_tx_address: data.bc_tx_address,
-        doctor_bc_address: data.doctor
+        disease_id: response.disease.disease._id,
+        diagnose: data.cipher.diagnose,
+        bc_tx_address: data.cipher.bc_tx_address,
+        doctor_bc_address: data.bc_addresses.doctor
     })
 
-    const receipt = {}
-    receipt.disease = disease
-    receipt.record = await bdb.create_tx(
+    const status = 201
+
+    response.record = await bdb.create_tx(
         record,
-        metadata,
+        {diagnose: data.metadata.diagnose},
         hospital.ed25519_private_key,
         hospital.ed25519_public_key
     )
 
-    return receipt
+    return { status, response }
 }
 
 async function index(data) {

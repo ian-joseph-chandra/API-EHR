@@ -12,7 +12,7 @@ async function create(req, res) {
 }
 
 function read(req, res) {
-
+    
 }
 
 module.exports = {

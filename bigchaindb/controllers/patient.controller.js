@@ -7,6 +7,7 @@ const bdb = require('../bdb'),
 async function create(data, res) {
     const hospital = await hospitals.findOne()
 
+    let status;
     const response = {}
     const check = {}
 
@@ -20,13 +21,12 @@ async function create(data, res) {
 
     // Set error message if data already exists on both databases
     if (check.bdb && check.mdb) {
-        response.status = 403
+        status = 403
         response.error = 'Data already exists in decentralized & local databases'
-
-        return response;
+        return { status, response };
     }
 
-    response.status = 201
+    status = 201
     response.bdb = {}
     response.mdb = {}
 
@@ -68,7 +68,7 @@ async function create(data, res) {
         response.mdb.receipt = patient
     }
 
-    return response
+    return { status, response }
 }
 
 async function read(data) {

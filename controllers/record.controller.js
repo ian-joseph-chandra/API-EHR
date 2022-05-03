@@ -8,29 +8,19 @@ const bdb = require('../bigchaindb/controllers/record.controller'),
 async function create(req, res) {
     const body = req.body
 
-    body.cipher.date = Date.now()
-    body.metadata.date = body.cipher.date
+    body.date = Date.now()
 
-    let response = {}
+    const response = {}
 
-    const start_bc = Date.now()
     // Send metadata to Blockchain
-    response.bc = await bc.create(body.metadata, res)
-    const stop_bc = Date.now()
+    response.bc = await bc.create(body, res)
 
-    body.cipher.bc_tx_address = response.bc.transactionHash
+    body.cipher.bc_tx_address = response.bc.receipt.transactionHash
 
-    const start_ddb = Date.now()
     // Send cipher to Decentralized DB
-    response.bdb = await bdb.create(body.cipher, body.metadata)
-    const stop_ddb = Date.now()
+    response.bdb = await bdb.create(body)
 
-    response.durations = {
-        bc: stop_bc - start_bc,
-        ddb: stop_ddb - start_ddb
-    }
-
-    res.status(200).json(response).end()
+    res.status(201).json(response).end()
 }
 
 async function read(req, res) {

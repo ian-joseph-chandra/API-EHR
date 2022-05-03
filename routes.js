@@ -22,7 +22,7 @@ module.exports = (route) => {
 
     // Routing for Hospital CRUD functions
     route.get('/hospitals', (req, res) => console.log("Get all hospitals"))
-    route.get('/hospitals/:hospital', (req, res) => console.log(`Get a hospital with id = ${req.params}`))
+    route.get('/hospitals/:hospital', (req, res) => hospital.read(req, res))
     route.post('/hospitals', (req, res) => hospital.create(req, res))
 
     // Routing for Diseases CRUD functions
