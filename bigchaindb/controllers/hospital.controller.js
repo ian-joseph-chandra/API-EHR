@@ -29,20 +29,49 @@ async function create(data) {
     };
 }
 
-// Get data from assets colelction (public)
+// Get data from assets collection (public)
 async function read(data) {
-    console.log('read activity')
     const status = 200
     const hospital = await assets.findOne({
-        'dat.model:': 'Hospital',
+        'data.model': 'Hospital',
         'data.bc_address': data.hospital
+    }, {
+        projection: {
+            'data.model': 0,
+            'data._id': 0,
+            id: 0,
+            _id: 0
+        }
     })
 
     return {status, hospital}
 }
 
-function diseases(data, hospital) {
+async function index(data) {
+    if (data.body.bc_addresses) {
+        return assets.find({
+            'data.model': 'Hospital',
+            'data.bc_address': {$in: data.body.bc_addresses}
+        }, {
+            projection: {
+                'data.model': 0,
+                'data._id': 0,
+                id: 0,
+                _id: 0
+            }
+        }).toArray();
+    }
 
+    return assets.find({
+        'data.model': 'Hospital'
+    }, {
+        projection: {
+            'data.model': 0,
+            'data._id': 0,
+            id: 0,
+            _id: 0
+        }
+    }).toArray();
 }
 
 // Get data from hospitals collection (local)
@@ -59,5 +88,5 @@ module.exports = {
     create,
     read,
     login,
-    diseases
+    index
 }

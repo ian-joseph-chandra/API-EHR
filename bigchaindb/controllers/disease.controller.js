@@ -27,7 +27,7 @@ async function create(data, res) {
     })
     
     status = 201
-    receipt = await bdb.create_tx(
+    const receipt = await bdb.create_tx(
         disease,
         {disease: data.metadata.disease},
         data.hospital.ed25519_private_key,

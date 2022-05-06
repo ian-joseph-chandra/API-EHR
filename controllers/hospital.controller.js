@@ -13,9 +13,16 @@ async function create(req, res) {
 
 // Get data from public collection (assets)
 async function read(req, res) {
-    const { status, response } = await bdb.read(req.params)
+    const { status, hospital } = await bdb.read(req.params)
 
-    res.status(status).json(response).end()
+    res.status(status).json(hospital).end()
+}
+
+async function index(req, res) {
+    // console.log('hospital index in action')
+    const response = await bdb.index(req)
+
+    res.status(200).json(response).end()
 }
 
 // Get data from local collection (hospitals)
@@ -25,8 +32,10 @@ async function login(req, res) {
     res.status(status).json(hospital).end()
 }
 
+
 module.exports = {
     create,
     read,
-    login
+    login,
+    index
 }
