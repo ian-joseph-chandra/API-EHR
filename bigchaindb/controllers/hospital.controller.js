@@ -1,5 +1,6 @@
 const bdb = require('../bdb'),
     driver = bdb.driver,
+    assets = bdb.assets,
     hospitals = bdb.mongoose.connection.collection('hospitals'),
     Hospital = require('../models/Hospital');
 
@@ -28,18 +29,35 @@ async function create(data) {
     };
 }
 
-function read(data) {
-    return hospitals.findOne({
-        'bc_address': data.hospital
+// Get data from assets colelction (public)
+async function read(data) {
+    console.log('read activity')
+    const status = 200
+    const hospital = await assets.findOne({
+        'dat.model:': 'Hospital',
+        'data.bc_address': data.hospital
     })
+
+    return {status, hospital}
 }
 
 function diseases(data, hospital) {
 
 }
 
+// Get data from hospitals collection (local)
+async function login(data) {
+    const status = 200
+    const hospital = await hospitals.findOne({
+        'bc_address': data.hospital
+    })
+
+    return {status, hospital}
+}
+
 module.exports = {
     create,
     read,
+    login,
     diseases
 }

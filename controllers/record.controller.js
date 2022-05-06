@@ -1,8 +1,7 @@
 const bdb = require('../bigchaindb/controllers/record.controller'),
     bc = require('../blockchain/controllers/record.controller'),
     handlers = {
-        response: require('../handlers/response.handler'
-        )
+        response: require('../handlers/response.handler')
     };
 
 async function create(req, res) {
@@ -33,7 +32,7 @@ async function read(req, res) {
 
 async function index(req, res) {
     let response = {}
-    response.bdb = await bdb.index(req.params)
+    response = await bdb.index(req.params)
 
     res.status(200).json(response).end()
 }

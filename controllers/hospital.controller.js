@@ -11,11 +11,22 @@ async function create(req, res) {
     res.status(200).json(response);
 }
 
-function read(req, res) {
-    
+// Get data from public collection (assets)
+async function read(req, res) {
+    const { status, response } = await bdb.read(req.params)
+
+    res.status(status).json(response).end()
+}
+
+// Get data from local collection (hospitals)
+async function login(req, res) {
+    const { status, hospital } = await bdb.login(req.params)
+
+    res.status(status).json(hospital).end()
 }
 
 module.exports = {
     create,
-    read
+    read,
+    login
 }

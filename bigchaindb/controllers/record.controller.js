@@ -66,7 +66,6 @@ async function read(data) {
         'id': result.bdb.record.id
     })
 
-    console.log(result)
     return result
 }
 

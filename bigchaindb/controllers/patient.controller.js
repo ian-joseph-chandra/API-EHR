@@ -75,6 +75,13 @@ async function read(data) {
     return await assets.findOne({
         'data.model': 'Patient',
         'data.bc_address': data.patient
+    }, {
+        projection: {
+            'data._id': 0,
+            'data.model': 0,
+            '_id': 0,
+            'id': 0
+        }
     })
 }
 
