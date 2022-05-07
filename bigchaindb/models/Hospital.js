@@ -31,6 +31,7 @@ const schema = new mongoose.Schema({
     },
     model: {
         type: String,
+        default: 'Hospital'
     }
 });
 

@@ -11,8 +11,7 @@ async function create(data) {
             name: data.name,
             bc_address: data.bc_address,
             ecdh_public_key: data.ecdh_public_key,
-            ed25519_public_key: keys.publicKey,
-            model: "Hospital"
+            ed25519_public_key: keys.publicKey
         }),
         mdb_data = new Hospital({
             name: data.name,
@@ -31,27 +30,27 @@ async function create(data) {
 
 // Get data from assets collection (public)
 async function read(data) {
-    const status = 200
-    const hospital = await assets.findOne({
-        'data.model': 'Hospital',
-        'data.bc_address': data.hospital
-    }, {
-        projection: {
-            'data.model': 0,
-            'data._id': 0,
-            id: 0,
-            _id: 0
-        }
-    })
-
-    return {status, hospital}
+    return {
+        status: 200,
+        hospital: await assets.findOne({
+            'data.model': 'Hospital',
+            'data.bc_address': data.hospital
+        }, {
+            projection: {
+                'data.model': 0,
+                'data._id': 0,
+                id: 0,
+                _id: 0
+            }
+        })
+    }
 }
 
 async function index(data) {
     if (data.body.bc_addresses) {
         return assets.find({
             'data.model': 'Hospital',
-            'data.bc_address': {$in: data.body.bc_addresses}
+            'data.bc_address': { $in: data.body.bc_addresses }
         }, {
             projection: {
                 'data.model': 0,
@@ -76,12 +75,9 @@ async function index(data) {
 
 // Get data from hospitals collection (local)
 async function login(data) {
-    const status = 200
-    const hospital = await hospitals.findOne({
+    return await hospitals.findOne({
         'bc_address': data.hospital
     })
-
-    return {status, hospital}
 }
 
 module.exports = {

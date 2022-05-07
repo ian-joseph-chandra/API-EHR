@@ -27,9 +27,9 @@ async function index(req, res) {
 
 // Get data from local collection (hospitals)
 async function login(req, res) {
-    const { status, hospital } = await bdb.login(req.params)
+    const response = await bdb.login(req.params)
 
-    res.status(status).json(hospital).end()
+    res.status(200).json(response).end()
 }
 
 

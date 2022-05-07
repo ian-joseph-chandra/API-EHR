@@ -15,7 +15,7 @@ async function create(data, res) {
     // store public data to assets collection 
     const result = await bdb.create_tx(
         doctor,
-        data,
+        null,
         hospital.ed25519_private_key,
         hospital.ed25519_public_key,
         res

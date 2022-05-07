@@ -9,15 +9,15 @@ async function create(req, res) {
 
     body.date = Date.now()
 
-    const response = {}
 
     // Send metadata to Blockchain
-    response.bc = await bc.create(body, res)
+    // response = {bc: await bc.create(body, res)}
+    const response = { bc: { receipt: { transactionHash: 'abc' } } }
 
     body.cipher.bc_tx_address = response.bc.receipt.transactionHash
 
     // Send cipher to Decentralized DB
-    response.bdb = await bdb.create(body)
+    response.bdb = await bdb.create(body, res)
 
     res.status(201).json(response).end()
 }

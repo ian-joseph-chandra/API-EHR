@@ -11,7 +11,7 @@ async function create(data) {
         data.date
     ).send(conn.hospital.sender);
 
-    return {status, receipt}
+    return { status, receipt }
 }
 
 async function read(data) {

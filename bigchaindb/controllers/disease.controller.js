@@ -3,39 +3,45 @@ const bdb = require('../bdb'),
     Disease = require('../models/Disease');
 
 async function create(data, res) {
-    let disease = await read({
+    console.log("data input disease", data)
+    let check = await read({
         patient: data.bc_addresses.patient,
         hospital: data.bc_addresses.hospital,
-        disease: data.cipher.disease
+        name: data.cipher.disease
     })
 
-    let status
-    let message
+    console.log("check", check)
+    if (check) {
+        const disease = check.data
+        disease.status = 403
+        disease.message = "Disease already exists"
 
-    if (disease) {
-        status = 403
-        message = "Disease already exists"
+        console.log('disease check', disease)
 
-        return { status, message, disease }
+        return disease
     }
 
     // Create disease if not exists
-    disease = new Disease({
+    const disease = new Disease({
         patient_bc_address: data.bc_addresses.patient,
         hospital_bc_address: data.bc_addresses.hospital,
         name: data.cipher.disease
     })
-    
-    status = 201
+
+    console.log("disease", disease)
+    // console.log("hospital", data.hospital)
+
+    console.log('disease input', data.metadata)
+    console.log('data input disease', data)
     const receipt = await bdb.create_tx(
         disease,
-        {disease: data.metadata.disease},
+        null,
         data.hospital.ed25519_private_key,
         data.hospital.ed25519_public_key,
         res
     )
-
-    return { status, receipt, disease }
+    console.log("disease receipt", receipt)
+    return { status: 201, receipt }
 }
 
 async function read(data) {
@@ -44,6 +50,11 @@ async function read(data) {
         'data.patient_bc_address': data.patient,
         'data.hospital_bc_address': data.hospital,
         'data.name': data.disease
+    }, {
+        projection: {
+            _id: 0,
+            "data.model": 0
+        }
     });
 }
 
@@ -59,6 +70,12 @@ function index(data) {
     return assets.find({
         'data.model': "Disease",
         'data.patient_bc_address': data.patient
+    }, {
+        projection:
+        {
+            _id: 0,
+            'data.model': 0
+        }
     }).toArray()
 }
 
