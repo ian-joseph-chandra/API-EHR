@@ -60,17 +60,30 @@ function index(data) {
         }).toArray()
     }
 
-    return assets.find({
-        'data.model': "Disease",
-        'data.patient_bc_address': data.patient
-    }, {
-        projection:
-            {
-                _id: 0,
-                'data.model': 0
+    return assets.aggregate([
+        {
+            $match: {'data.model': 'Disease'}
+        },
+        {
+            $project: {
+                'data.model': 0,
+                'data.patient_bc_address': 0
             }
-    }).toArray()
+        },
+        {
+            $group: {
+                _id: {hospital: '$data.hospital_bc_address'},
+                diseases: {
+                    $push: {
+                        name: '$data.name',
+                        _id: '$data._id'
+                    }
+                }
+            }
+        }
+    ]).toArray()
 }
+
 
 module.exports = {
     create,
