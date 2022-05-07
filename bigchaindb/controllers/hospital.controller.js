@@ -50,7 +50,7 @@ async function index(data) {
     if (data.body.bc_addresses) {
         return assets.find({
             'data.model': 'Hospital',
-            'data.bc_address': { $in: data.body.bc_addresses }
+            'data.bc_address': {$in: data.body.bc_addresses}
         }, {
             projection: {
                 'data.model': 0,

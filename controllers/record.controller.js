@@ -11,8 +11,7 @@ async function create(req, res) {
 
 
     // Send metadata to Blockchain
-    // response = {bc: await bc.create(body, res)}
-    const response = { bc: { receipt: { transactionHash: 'abc' } } }
+    const response = {bc: await bc.create(body, res)}
 
     body.cipher.bc_tx_address = response.bc.receipt.transactionHash
 

@@ -8,23 +8,15 @@ const bdb = require('../bdb'),
 
 
 async function create(data, res) {
-    const hospital = await controllers.hospital.login({ hospital: data.bc_addresses.hospital })
-    
-    data.hospital = hospital.hospital
-    
-    const check = {
+    data.hospital = await controllers.hospital.login({hospital: data.bc_addresses.hospital})
+
+    const response = {
         disease: await controllers.disease.create(data, res)
     }
 
-    const response = { 
-        disease: check.disease.receipt.asset.data || check.disease
-     }
-
-    
-
     // Create Record
     const record = new Record({
-        disease_id: response.disease._id,
+        disease_id: response.disease.receipt ? response.disease.receipt.asset.data._id : response.disease._id,
         diagnose: data.cipher.diagnose,
         bc_tx_address: data.cipher.bc_tx_address,
         doctor_bc_address: data.bc_addresses.doctor
@@ -32,13 +24,13 @@ async function create(data, res) {
 
     response.record = await bdb.create_tx(
         record,
-        { diagnose: data.metadata.diagnose },
-        hospital.ed25519_private_key,
-        hospital.ed25519_public_key,
+        {diagnose: data.metadata.diagnose},
+        data.hospital.ed25519_private_key,
+        data.hospital.ed25519_public_key,
         res
     )
 
-    return { status: 201, response }
+    return {status: 201, response}
 }
 
 async function index(data) {

@@ -11,7 +11,7 @@ async function create(data, res) {
 
     // Check data in local & decentralized DB
     const check = {
-        bdb: await read({ patient: data.bc_address }),
+        bdb: await read({patient: data.bc_address}),
         mdb: await patients.findOne({
             'bc_address': data.bc_address
         })
@@ -20,7 +20,7 @@ async function create(data, res) {
     // Set error message if data already exists on both DB
     if (check.mdb) {
         response.error = 'Data already exists in decentralized & local databases'
-        return { status: 403, response };
+        return {status: 403, response};
     } else if (check.bdb && !check.mdb) {
         const patient = new Patient(check.bdb.data);
         patient.email = data.email;
@@ -75,7 +75,7 @@ async function create(data, res) {
         receipt: patient
     }
 
-    return { status: 201, response }
+    return {status: 201, response}
 }
 
 async function read(data) {
