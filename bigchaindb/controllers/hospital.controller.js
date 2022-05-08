@@ -30,20 +30,19 @@ async function create(data) {
 
 // Get data from assets collection (public)
 async function read(data) {
-    return {
-        status: 200,
-        hospital: await assets.findOne({
-            'data.model': 'Hospital',
-            'data.bc_address': data.hospital
-        }, {
-            projection: {
-                'data.model': 0,
-                'data._id': 0,
-                id: 0,
-                _id: 0
-            }
-        })
-    }
+    const hospital = await assets.findOne({
+        'data.model': 'Hospital',
+        'data.bc_address': data.hospital
+    }, {
+        projection: {
+            'data.model': 0,
+            'data._id': 0,
+            id: 0,
+            _id: 0
+        }
+    })
+
+    return hospital.data
 }
 
 async function index(data) {
@@ -77,6 +76,12 @@ async function index(data) {
 async function login(data) {
     return await hospitals.findOne({
         'bc_address': data.hospital
+    }, {
+        projection: {
+            _id: 0,
+            model: 0,
+            __v: 0
+        }
     })
 }
 

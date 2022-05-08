@@ -9,7 +9,6 @@ async function create(req, res) {
 
     body.date = Date.now()
 
-
     // Send metadata to Blockchain
     const response = {bc: await bc.create(body, res)}
 

@@ -13,9 +13,9 @@ async function create(req, res) {
 
 // Get data from public collection (assets)
 async function read(req, res) {
-    const { status, hospital } = await bdb.read(req.params)
+    const result = await bdb.read(req.params)
 
-    res.status(status).json(hospital).end()
+    res.status(200).json(result).end()
 }
 
 async function index(req, res) {

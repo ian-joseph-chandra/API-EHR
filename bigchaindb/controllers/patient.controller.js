@@ -79,7 +79,7 @@ async function create(data, res) {
 }
 
 async function read(data) {
-    return await assets.findOne({
+    const patient = await assets.findOne({
         'data.model': 'Patient',
         'data.bc_address': data.patient
     }, {
@@ -90,6 +90,8 @@ async function read(data) {
             'id': 0
         }
     })
+
+    return patient.data
 }
 
 async function login(data) {
@@ -98,6 +100,9 @@ async function login(data) {
         'password': data.password
     }, {
         projection: {
+            _id: 0,
+            email: 0,
+            __v: 0,
             model: 0,
             password: 0
         }

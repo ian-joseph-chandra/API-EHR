@@ -37,11 +37,47 @@ async function index(data) {
     const result = {}
 
     result.disease = await controllers.disease.read(data)
+    delete result.disease.hospital_bc_address
+    delete result.disease.patient_bc_address
+
     result.hospital = await controllers.hospital.read(data)
-    result.records = await bdb.assets.find({
-        'data.model': "Record",
-        'data.disease_id': result.disease.data._id
-    }).toArray();
+    delete result.hospital.bc_address
+
+    result.records = await bdb.assets.aggregate([{
+        $match: {'data.disease_id': result.disease._id}
+    }, {
+        $project: {
+            _id: 0,
+            'data.model': 0,
+            'data._id': 0,
+            'data.disease_id': 0
+        }
+    }, {
+        $lookup: {
+            from: 'assets',
+            localField: 'data.doctor_bc_address',
+            foreignField: 'data.bc_address',
+            as: 'data.doctor'
+        }
+    }, {
+        $project: {
+            'data.doctor._id': 0,
+            'data.doctor.id': 0,
+            'data.doctor.data.model': 0,
+            'data.doctor.data._id': 0,
+        }
+    }, {
+        $addFields: {
+            'data.metadata.bdb_id': '$id',
+            'data.doctor': {
+                $arrayElemAt: ['$data.doctor.data', 0]
+            }
+        }
+    }, {
+        $replaceRoot: {
+            newRoot: '$data'
+        }
+    }]).toArray();
 
     return result
 }
@@ -57,9 +93,9 @@ async function read(data) {
         'data.date': data.record
     });
 
-    result.bdb.metadata = await bdb.metadata.find({
-        'id': result.bdb.record.id
-    })
+    // result.bdb.metadata = await bdb.metadata.find({
+    //     'id': result.bdb.record.id
+    // })
 
     return result
 }

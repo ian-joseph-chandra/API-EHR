@@ -8,12 +8,25 @@ async function read(req, res) {
 }
 
 async function index(req, res) {
-    const response = await bdb.index(req.params)
+    const response = await bdb.index(req.params, req.body)
+
+    res.status(200).json(response).end()
+}
+
+/**
+ * Get records from several diseases
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+async function records(req, res) {
+    const response = await bdb.index(req.body)
 
     res.status(200).json(response).end()
 }
 
 module.exports = {
     index,
-    read
+    read,
+    records
 }
