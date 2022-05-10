@@ -36,4 +36,9 @@ module.exports = (route) => {
     route.get('/patients/:patient/hospitals/:hospital/diseases/:disease/records', (req, res) => record.index(req, res))
     route.get('/patients/:patient/hospitals/:hospital/diseases/:disease/records/:timestamp', (req, res) => record.read(req, res))
     route.post('/records', (req, res) => record.create(req, res))
+
+    // Routing for timestamp
+    route.get('/time', (req, res) => {
+        res.status(200).json(Date.now()).end()
+    })
 }

@@ -19,12 +19,17 @@ async function create(data, res) {
     const disease = new Disease({
         patient_bc_address: data.bc_addresses.patient,
         hospital_bc_address: data.bc_addresses.hospital,
-        name: data.cipher.disease
+        name: data.cipher.disease,
+        date: data.date
     })
 
     return {
         status: 201,
-        receipt: await bdb.create_tx(disease, {disease: data.metadata.disease}, data.hospital.ed25519_private_key, data.hospital.ed25519_public_key, res)
+        receipt: await bdb.create_tx(
+            disease,
+            {disease: data.metadata.disease},
+            data.hospital.ed25519_private_key,
+            data.hospital.ed25519_public_key, res)
     }
 }
 
@@ -42,12 +47,8 @@ async function read(data) {
     });
 
     if (disease) {
-        const result = disease.data
-        result.metadata = {
-            bdb_id: disease.id
-        }
-
-        return result
+        disease.data.metadata = {bdb_id: disease.id}
+        return disease.data
     }
 
     return null
@@ -65,7 +66,7 @@ async function index(params, body) {
             $project: {
                 'data.metadata': '$id',
                 'data.name': 1,
-                'data._id': 1
+                'data.date': 1
             }
         }, {
             $replaceRoot: {
@@ -102,7 +103,8 @@ async function index(params, body) {
                     ecdh_public_key: '$data.ecdh_public_key'
                 },
                 'diseases.data.name': 1,
-                'diseases.data._id': 1
+                'diseases.data._id': 1,
+                'diseases.data.date': 1
             }
         }, {
             $project: {

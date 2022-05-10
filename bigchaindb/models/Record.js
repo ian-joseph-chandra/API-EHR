@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
     },
     date: {
         type: String,
-        default: Date.now()
+        required: true
     },
     disease_id: {
         type: mongoose.Types.ObjectId,

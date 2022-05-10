@@ -7,8 +7,6 @@ const bdb = require('../bigchaindb/controllers/record.controller'),
 async function create(req, res) {
     const body = req.body
 
-    body.date = Date.now()
-
     // Send metadata to Blockchain
     const response = {bc: await bc.create(body, res)}
 
@@ -29,8 +27,7 @@ async function read(req, res) {
 }
 
 async function index(req, res) {
-    let response = {}
-    response = await bdb.index(req.params)
+    const response = await bdb.index(req.params)
 
     res.status(200).json(response).end()
 }

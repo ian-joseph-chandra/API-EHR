@@ -16,6 +16,7 @@ async function create(data, res) {
 
     // Create Record
     const record = new Record({
+        date: data.date,
         disease_id: response.disease.receipt ? response.disease.receipt.asset.data._id : response.disease._id,
         diagnose: data.cipher.diagnose,
         bc_tx_address: data.cipher.bc_tx_address,
@@ -34,14 +35,9 @@ async function create(data, res) {
 }
 
 async function index(data) {
-    const result = {}
-
-    result.disease = await controllers.disease.read(data)
+    const result = {disease : await controllers.disease.read(data)}
     delete result.disease.hospital_bc_address
     delete result.disease.patient_bc_address
-
-    result.hospital = await controllers.hospital.read(data)
-    delete result.hospital.bc_address
 
     result.records = await bdb.assets.aggregate([{
         $match: {'data.disease_id': result.disease._id}
@@ -64,7 +60,7 @@ async function index(data) {
             'data.doctor._id': 0,
             'data.doctor.id': 0,
             'data.doctor.data.model': 0,
-            'data.doctor.data._id': 0,
+            'data.doctor.data._id': 0
         }
     }, {
         $addFields: {
