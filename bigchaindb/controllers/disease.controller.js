@@ -64,6 +64,7 @@ async function index(params, body) {
             }
         }, {
             $project: {
+                'data._id': 1,
                 'data.metadata': '$id',
                 'data.name': 1,
                 'data.date': 1
