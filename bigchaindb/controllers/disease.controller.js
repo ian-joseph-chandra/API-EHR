@@ -76,47 +76,96 @@ async function index(params, body) {
         }]).toArray()
     }
 
-    return assets.aggregate([
-        {
-            $match: {
-                'data.bc_address': {$in: body.hospitals},
-                'data.model': 'Hospital'
+    if (JSON.stringify(body) !== '{}') {
+        return assets.aggregate([
+            {
+                $match: {
+                    'data.bc_address': {$in: body.hospitals},
+                    'data.model': 'Hospital'
+                }
+            }, {
+                $project: {
+                    ed25519_public_key: 0,
+                    model: 0,
+                    _id: 0
+                }
+            }, {
+                $lookup: {
+                    from: 'assets',
+                    localField: 'data.bc_address',
+                    foreignField: 'data.hospital_bc_address',
+                    as: 'diseases'
+                }
+            }, {
+                $project: {
+                    _id: 0,
+                    hospital: {
+                        name: '$data.name',
+                        bc_address: '$data.bc_address',
+                        ecdh_public_key: '$data.ecdh_public_key'
+                    },
+                    'diseases.data.name': 1,
+                    'diseases.data._id': 1,
+                    'diseases.data.date': 1
+                }
+            }, {
+                $project: {
+                    hospital: 1,
+                    diseases: '$diseases.data'
+                }
+            }, {
+                $addFields: {
+                    'diseases.encrypted': true
+                }
+            }]).toArray()
+    }
+
+    return assets.aggregate([{
+        $match: {
+            'data.patient_bc_address': params.patient,
+            'data.model': 'Disease'
+        }
+    }, {
+        $project: {
+            'data.name': 1,
+            'data.hospital_bc_address': 1,
+            'data.date': 1,
+            'data._id': 1,
+        }
+    }, {
+        $group: {
+            _id: '$data.hospital_bc_address',
+            diseases: {
+                $push: '$data'
             }
-        }, {
-            $project: {
-                ed25519_public_key: 0,
-                model: 0,
-                _id: 0
-            }
-        }, {
-            $lookup: {
-                from: 'assets',
-                localField: 'data.bc_address',
-                foreignField: 'data.hospital_bc_address',
-                as: 'diseases'
-            }
-        }, {
-            $project: {
-                _id: 0,
-                hospital: {
-                    name: '$data.name',
-                    bc_address: '$data.bc_address',
-                    ecdh_public_key: '$data.ecdh_public_key'
-                },
-                'diseases.data.name': 1,
-                'diseases.data._id': 1,
-                'diseases.data.date': 1
-            }
-        }, {
-            $project: {
-                hospital: 1,
-                diseases: '$diseases.data'
-            }
-        }, {
-            $addFields: {
-                'diseases.encrypted': true
-            }
-        }]).toArray()
+        }
+    }, {
+        $project: {
+            'diseases.hospital_bc_address': 0
+        }
+    }, {
+        $lookup: {
+            from: 'assets',
+            localField: '_id',
+            foreignField: 'data.bc_address',
+            as: 'hospital'
+        }
+    }, {
+        $project: {
+            diseases: 1,
+            'hospital.data.name': 1,
+            'hospital.data.bc_address': 1,
+            'hospital.data.ecdh_public_key': 1,
+            _id: 0
+        }
+    }, {
+        $addFields: {
+            'hospital': {
+                $arrayElemAt: ['$hospital.data', 0]
+            },
+            'diseases.encrypted': true
+        }
+    }]).toArray()
 }
 
 function records(data) {
