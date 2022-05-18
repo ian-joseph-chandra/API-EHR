@@ -48,7 +48,8 @@ async function create(data, res) {
         bc_address: data.bc_address,
         dob: data.dob,
         gender: data.gender,
-        ecdh_public_key: data.ecdh.public_key
+        ecdh_public_key: data.ecdh.public_key,
+        iv: data.iv
     })
 
     // Store data to bdb

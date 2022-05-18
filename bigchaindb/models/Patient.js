@@ -30,6 +30,10 @@ const schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    iv: {
+        type: String,
+        required: true
+    },
     model: {
         type: String,
         default: "Patient"
