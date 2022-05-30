@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "bigchaindb-driver": "^4.3.0",
