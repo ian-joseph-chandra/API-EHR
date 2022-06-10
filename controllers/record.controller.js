@@ -27,7 +27,7 @@ async function read(req, res) {
 }
 
 async function index(req, res) {
-    const response = await bdb.index(req.params)
+    const response = await bdb.index(req.query)
 
     res.status(200).json(response).end()
 }

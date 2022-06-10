@@ -8,7 +8,7 @@ const bdb = require('../bdb'),
 
 
 async function create(data, res) {
-    data.hospital = await controllers.hospital.login({hospital: data.bc_addresses.hospital})
+    data.hospital = await controllers.hospital.login({ hospital: data.bc_addresses.hospital })
 
     const response = {
         disease: await controllers.disease.create(data, res)
@@ -25,28 +25,38 @@ async function create(data, res) {
 
     response.record = await bdb.create_tx(
         record,
-        {diagnose: data.metadata.diagnose},
+        { diagnose: data.metadata.diagnose },
         data.hospital.ed25519_private_key,
         data.hospital.ed25519_public_key,
         res
     )
 
-    return {status: 201, response}
+    return { status: 201, response }
 }
 
-async function index(data) {
-    const result = {disease : await controllers.disease.read(data)}
-    delete result.disease.hospital_bc_address
-    delete result.disease.patient_bc_address
+// function index(query) {
+//     diseases = (typeof query.diseases == 'string') ? [query.diseases] : query.diseases
 
-    result.records = await bdb.assets.aggregate([{
-        $match: {'data.disease_id': result.disease._id}
+//     return bdb.assets.aggregate([{
+//         $match: { 'data.disease_id': { $in: diseases } }
+//     }, {
+//         $project: {
+//             'data.metadata': '$id',
+//             'data.model': 0
+//         }
+//     }]).toArray()
+// }
+
+async function index(query) {
+    const diseases = (typeof query.diseases == 'string') ? [query.diseases] : query.diseases
+
+    return await bdb.assets.aggregate([{
+        $match: { 'data.disease_id': { $in: diseases } }
     }, {
         $project: {
             _id: 0,
             'data.model': 0,
             'data._id': 0,
-            'data.disease_id': 0
         }
     }, {
         $lookup: {
@@ -57,6 +67,7 @@ async function index(data) {
         }
     }, {
         $project: {
+            'data.doctor_bc_address': 0,
             'data.doctor._id': 0,
             'data.doctor.id': 0,
             'data.doctor.data.model': 0,
@@ -74,8 +85,6 @@ async function index(data) {
             newRoot: '$data'
         }
     }]).toArray();
-
-    return result
 }
 
 async function read(data) {
