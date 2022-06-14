@@ -8,7 +8,7 @@ async function create(req, res) {
     const body = req.body
 
     // Send metadata to Blockchain
-    const response = {bc: await bc.create(body, res)}
+    const response = { bc: await bc.create(body, res) }
 
     body.cipher.bc_tx_address = response.bc.receipt.transactionHash
 
@@ -19,9 +19,7 @@ async function create(req, res) {
 }
 
 async function read(req, res) {
-    const response = {}
-
-    response.bc = await bc.read(req.params)
+    const response = { bc: await bc.read(req.params) }
 
     res.status(200).json(response).end()
 }
