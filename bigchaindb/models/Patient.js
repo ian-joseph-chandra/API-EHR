@@ -31,8 +31,7 @@ const schema = new mongoose.Schema({
         unique: true
     },
     iv: {
-        type: String,
-        required: true
+        type: String
     },
     model: {
         type: String,

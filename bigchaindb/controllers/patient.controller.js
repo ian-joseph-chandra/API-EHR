@@ -22,11 +22,11 @@ async function create(data, res) {
         response.error = 'Data already exists in decentralized & local databases'
         return {status: 403, response};
     } else if (check.bdb && !check.mdb) {
-        const patient = new Patient(check.bdb.data);
+        const patient = new Patient(check.bdb);
         patient.email = data.email;
         patient.password = data.password;
         patient.save()
-
+        
         delete patient.password // Don't show the password in the receipt
         return {
             status: 201,
@@ -85,7 +85,6 @@ async function read(data) {
         'data.bc_address': data.patient
     }, {
         projection: {
-            'data._id': 0,
             'data.model': 0,
             '_id': 0,
             'id': 0
