@@ -4,12 +4,12 @@
   },
   "dependencies": {
     "bigchaindb-driver": "^4.3.0",
-    "body-parser": "^1.19.2",
+    "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "ethereumjs-tx": "^2.1.2",
-    "express": "^4.17.3",
-    "mongoose": "^6.3.0",
-    "nodemon": "^2.0.15",
-    "web3": "^1.7.3"
+    "express": "^4.18.1",
+    "mongoose": "^6.4.6",
+    "nodemon": "^2.0.19",
+    "web3": "^1.7.4"
   }
 }

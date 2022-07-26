@@ -20,7 +20,7 @@ async function create(data, res) {
         patient_bc_address: data.bc_addresses.patient,
         hospital_bc_address: data.bc_addresses.hospital,
         name: data.cipher.disease,
-        date: data.date
+        nonce: data.nonce
     })
 
     return {
@@ -67,7 +67,7 @@ async function index(params, body) {
                 'data._id': 1,
                 'data.metadata': '$id',
                 'data.name': 1,
-                'data.date': 1
+                'data.nonce': 1
             }
         }, {
             $replaceRoot: {
@@ -106,7 +106,7 @@ async function index(params, body) {
                     },
                     'diseases.data.name': 1,
                     'diseases.data._id': 1,
-                    'diseases.data.date': 1
+                    'diseases.data.nonce': 1
                 }
             }, {
                 $project: {
@@ -129,7 +129,7 @@ async function index(params, body) {
         $project: {
             'data.name': 1,
             'data.hospital_bc_address': 1,
-            'data.date': 1,
+            'data.nonce': 1,
             'data._id': 1,
         }
     }, {
