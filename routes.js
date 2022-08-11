@@ -35,7 +35,7 @@ module.exports = (route) => {
     // Routing for Records CRUD functions
     route.get('/records', (req, res) => record.index(req, res))
     // route.get('/patients/:patient/hospitals/:hospital/diseases/:disease/records', (req, res) => record.index(req, res))
-    route.get('/patients/:patient/hospitals/:hospital/diseases/:disease/records/:timestamp', (req, res) => record.read(req, res))
+    route.get('/records/tx/:tx', (req, res) => record.read(req, res))
     route.post('/records', (req, res) => record.create(req, res))
 
     // Routing for timestamp

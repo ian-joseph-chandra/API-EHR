@@ -34,19 +34,6 @@ async function create(data, res) {
     return { status: 201, response }
 }
 
-// function index(query) {
-//     diseases = (typeof query.diseases == 'string') ? [query.diseases] : query.diseases
-
-//     return bdb.assets.aggregate([{
-//         $match: { 'data.disease_id': { $in: diseases } }
-//     }, {
-//         $project: {
-//             'data.metadata': '$id',
-//             'data.model': 0
-//         }
-//     }]).toArray()
-// }
-
 async function index(query) {
     const diseases = (typeof query.diseases == 'string') ? [query.diseases] : query.diseases
 
