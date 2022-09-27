@@ -4,7 +4,8 @@ const bdb = require('../bdb'),
         hospital: require('../controllers/hospital.controller'),
         doctor: require('../controllers/doctor.controller')
     },
-    Record = require("../models/Record");
+    Record = require("../models/Record"),
+    os = require('os-utils');
 
 
 async function create(data, res) {

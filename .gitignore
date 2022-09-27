@@ -132,3 +132,4 @@ dist
 /blockchain/smart-contracts/build/contracts/
 /blockchain/bc.connection.js
 /blockchain/smart-contracts/truffle-config.js
+/blockchain/ganache.connection.js

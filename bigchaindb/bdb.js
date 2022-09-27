@@ -1,7 +1,8 @@
 // Import BigchainDB components
 const driver = require('bigchaindb-driver'),
     transaction = driver.Transaction,
-    conn = new driver.Connection('http://localhost:9984/api/v1/');
+    conn = new driver.Connection('http://localhost:9984/api/v1/'),
+    fs = require('fs');
 
 // Import MongoDB components
 const mongoose = require('mongoose'),
@@ -20,7 +21,7 @@ async function create_tx(data, metadata, privateKey, publicKey, res) {
 
         const tx = transaction.makeCreateTransaction(
             data,
-            metadata,
+            {'test': 'test'},
 
             // A transaction needs an output
             [transaction.makeOutput(
@@ -29,9 +30,14 @@ async function create_tx(data, metadata, privateKey, publicKey, res) {
             publicKey
         )
 
-        const txSigned = transaction.signTransaction(tx, privateKey)
+        const txSigned = transaction.signTransaction(tx, privateKey),
+            start = Date.now()
+        const receipt = await conn.postTransactionCommit(txSigned),
+            stop = Date.now();
 
-        return await conn.postTransactionCommit(txSigned) // Return transaction receipt
+        fs.appendFileSync('./bigchaindb/test/BDB-10KB.csv', `${stop - start}\n`)
+
+        return receipt
     } catch (err) {
         console.error(err)
     }

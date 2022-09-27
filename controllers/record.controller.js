@@ -15,7 +15,7 @@ async function create(req, res) {
     // Send cipher to Decentralized DB
     response.bdb = await bdb.create(body, res)
 
-    res.status(201).json(response).end()
+    // res.status(201).json(response).end()
 }
 
 async function read(req, res) {
